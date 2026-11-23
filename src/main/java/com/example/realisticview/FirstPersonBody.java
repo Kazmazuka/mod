@@ -16,13 +16,18 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 /**
- * 一人称視点で自分のプレイヤーモデルを描画する。
- * 頭と腕は縮小して隠す(腕は一人称の手が別に描画されるため重複させない)。
+ * 下を向いた時だけ自分のプレイヤーモデルを描画する。
+ * 頭・腕は PlayerRendererMixin で非表示(保険としてスケール縮小も併用)。
  */
 public final class FirstPersonBody {
     private static final float EPS = 0.0001f;
+    private static boolean rendering;
 
     private FirstPersonBody() {}
+
+    public static boolean isRenderingBody() {
+        return rendering;
+    }
 
     public static void onRenderLevel(RenderLevelStageEvent e) {
         if (e.getStage() != RenderLevelStageEvent.Stage.AFTER_ENTITIES || !Config.SHOW_BODY.get()) return;
@@ -32,6 +37,7 @@ public final class FirstPersonBody {
         Camera cam = e.getCamera();
         if (p == null || cam.isDetached() || cam.getEntity() != p || !mc.options.getCameraType().isFirstPerson()) return;
         if (p.isSpectator() || p.isInvisible() || p.isSleeping() || p.isScoping()) return;
+        if (cam.getXRot() < Config.BODY_MIN_PITCH.get()) return; // 十分に下を向いていない時は描画しない
 
         EntityRenderDispatcher d = mc.getEntityRenderDispatcher();
         EntityRenderer<?> r = d.getRenderer(p);
@@ -44,11 +50,10 @@ public final class FirstPersonBody {
         double z = Mth.lerp(pt, p.zo, p.getZ());
         Vec3 c = cam.getPosition();
 
-        // 下を向くほど体を後ろへ下げて、胸の前面が見えるようにする
         float bodyYaw = Mth.rotLerp(pt, p.yBodyRotO, p.yBodyRot) * Mth.DEG_TO_RAD;
         float pitchFactor = 0.35f + 0.65f * Mth.clamp((cam.getXRot() - 20f) / 50f, 0f, 1f);
         float back = Config.BODY_BACK_OFFSET.get().floatValue() * pitchFactor;
-        double ox = Mth.sin(bodyYaw) * back;   // 前方向 (-sin, cos) の逆
+        double ox = Mth.sin(bodyYaw) * back;
         double oz = -Mth.cos(bodyYaw) * back;
 
         PlayerModel<AbstractClientPlayer> m = pr.getModel();
@@ -63,6 +68,7 @@ public final class FirstPersonBody {
             hidden[i].zScale = EPS;
         }
 
+        rendering = true;
         try {
             PoseStack ps = e.getPoseStack();
             MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
@@ -70,6 +76,7 @@ public final class FirstPersonBody {
                     Mth.lerp(pt, p.yRotO, p.getYRot()), pt, ps, buffers, d.getPackedLightCoords(p, pt));
             buffers.endBatch();
         } finally {
+            rendering = false;
             for (int i = 0; i < hidden.length; i++) {
                 hidden[i].xScale = saved[i][0];
                 hidden[i].yScale = saved[i][1];

@@ -26,5 +26,6 @@ public class RealisticView {
         NeoForge.EVENT_BUS.addListener(FirstPersonBody::onRenderLevel);
         NeoForge.EVENT_BUS.addListener(HeadBob::onCameraAngles);
         NeoForge.EVENT_BUS.addListener(HeadBob::onClientTick);
+        NeoForge.EVENT_BUS.addListener(HandSway::onRenderHand);
     }
 }
