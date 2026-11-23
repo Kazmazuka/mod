@@ -1,0 +1,15 @@
+{
+  "vertex": "realisticview:motion_blur",
+  "fragment": "realisticview:motion_blur",
+  "attributes": [ "Position" ],
+  "samplers": [
+    { "name": "DiffuseSampler" },
+    { "name": "DepthSampler" }
+  ],
+  "uniforms": [
+    { "name": "InvViewProj", "type": "matrix4x4", "count": 16, "values": [ 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,1.0,0.0, 0.0,0.0,0.0,1.0 ] },
+    { "name": "PrevViewProj", "type": "matrix4x4", "count": 16, "values": [ 1.0,0.0,0.0,0.0, 0.0,1.0,0.0,0.0, 0.0,0.0,1.0,0.0, 0.0,0.0,0.0,1.0 ] },
+    { "name": "CamDelta", "type": "float", "count": 3, "values": [ 0.0, 0.0, 0.0 ] },
+    { "name": "Params", "type": "float", "count": 4, "values": [ 1.0, 0.08, 16.0, 0.0 ] }
+  ]
+}

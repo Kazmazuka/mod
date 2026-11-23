@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+
+[[mods]]
+modId = "realisticview"
+version = "1.0.0"
+displayName = "Realistic View"
+description = '''
+Realistic motion blur (depth reprojection), realistic walking camera motion, and a visible first-person body.
+'''
+
+[[mixins]]
+config = "realisticview.mixins.json"
+
+[[dependencies.realisticview]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1.0,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.realisticview]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.22)"
+ordering = "NONE"
+side = "CLIENT"
