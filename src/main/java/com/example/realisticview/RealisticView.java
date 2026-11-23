@@ -23,9 +23,10 @@ public class RealisticView {
         modBus.addListener(MotionBlur::registerShaders);
 
         NeoForge.EVENT_BUS.addListener(MotionBlur::onRenderLevel);
-        NeoForge.EVENT_BUS.addListener(FirstPersonBody::onRenderLevel);
         NeoForge.EVENT_BUS.addListener(HeadBob::onCameraAngles);
         NeoForge.EVENT_BUS.addListener(HeadBob::onClientTick);
         NeoForge.EVENT_BUS.addListener(HandSway::onRenderHand);
+        NeoForge.EVENT_BUS.addListener(HandSway::onClientTick);
+        // FirstPersonBody(一人称ボディ表示)は不具合が多いため登録しない
     }
 }

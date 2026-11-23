@@ -22,11 +22,11 @@ public final class Config {
             .comment("リアルな歩行時の頭の揺れ(バニラのview bobbingは自動で無効化)")
             .define("headBob", true);
     public static final ModConfigSpec.DoubleValue HEAD_BOB_INTENSITY = B
-            .comment("揺れ全体の強さ。1.0が現実の人間に近い値")
-            .defineInRange("headBobIntensity", 1.0, 0.0, 3.0);
+            .comment("揺れ全体の強さ。1.0が現実の人間に近い値。初期値はやや控えめ")
+            .defineInRange("headBobIntensity", 0.7, 0.0, 3.0);
     public static final ModConfigSpec.DoubleValue SWAY_DIAGONAL = B
             .comment("斜め方向の揺れ(ロール・ヨー・左右・斜めのピッチ)の強さ")
-            .defineInRange("swayDiagonal", 1.0, 0.0, 3.0);
+            .defineInRange("swayDiagonal", 0.85, 0.0, 3.0);
     public static final ModConfigSpec.BooleanValue LANDING = B
             .comment("着地・ジャンプの衝撃で視点が沈む")
             .define("landingImpact", true);
@@ -40,17 +40,29 @@ public final class Config {
             .comment("環境の演出: 高速落下時の風圧による振動、水中のゆらゆらした揺れ")
             .define("environment", true);
     public static final ModConfigSpec.BooleanValue HAND_SWAY = B
-            .comment("手(持ち物)の慣性: 視点を振ると遅れてついてくる。歩行でも手が揺れる")
+            .comment("手(持ち物)の慣性・スイングの弧・アイテムを投げる時の腕の動き")
             .define("handSway", true);
 
+    public static final ModConfigSpec.BooleanValue SMOOTH_ANIMATION = B
+            .comment("人型モブ・プレイヤーの歩行アニメを滑らかで自然にする(体のひねり、上下動、足上げ、腕の遅れ)")
+            .define("smoothAnimation", true);
+    public static final ModConfigSpec.DoubleValue ANIMATION_STRENGTH = B
+            .comment("歩行アニメ補正の強さ")
+            .defineInRange("animationStrength", 1.0, 0.0, 2.0);
+
+    public static final ModConfigSpec.BooleanValue GROUND_ITEMS = B
+            .comment("ドロップアイテムを本物のように床に置く(回転・浮遊なし)。投げた時は回転しながら飛び、着地で弾んで静止する")
+            .define("groundItems", true);
+
+    // 一人称ボディ表示は不具合が多いため現在は無効(イベントを登録していません)
     public static final ModConfigSpec.BooleanValue SHOW_BODY = B
-            .comment("下を向いた時に自分の体を表示する")
-            .define("showBody", true);
+            .comment("(現在は無効化されています)一人称で体を表示する")
+            .define("showBody", false);
     public static final ModConfigSpec.DoubleValue BODY_MIN_PITCH = B
-            .comment("体を表示し始める視点の下向き角度(度)。0=水平、90=真下。大きいほど真下に近い時だけ表示")
+            .comment("(無効化中)")
             .defineInRange("bodyMinPitch", 35.0, 0.0, 89.0);
     public static final ModConfigSpec.DoubleValue BODY_BACK_OFFSET = B
-            .comment("下を向いた時に体を後ろへずらす量(ブロック)。胸の前面が見えるようになる")
+            .comment("(無効化中)")
             .defineInRange("bodyBackOffset", 0.14, 0.0, 0.5);
 
     public static final ModConfigSpec SPEC = B.build();
